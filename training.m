@@ -11,7 +11,7 @@ train_pct = 0.8; %will be further divided into training set and cross validation
 windowSize = 1024;
 k_fold = 5;   %number of folds for K-fold cross-validation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%{
 PE_outputMatrix = PE_F(data);
 FD_outputMatrix = FD_F(data);
 HE_outputMatrix = HE_F(data);
@@ -32,7 +32,7 @@ feature_matrix = [kurt_outputMatrix(:)...
 %labels
 %repeat the labels for each channel
 label_vector = repmat(record_labels, floor( size(feature_matrix, 1)/n_windows), 1 );
-
+%}
 
 %%%%%%%%%%%%%% Training%%%%%%%%%%%%%%%
 %shuffle the data

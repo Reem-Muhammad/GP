@@ -17,7 +17,7 @@ for ch=1:n_channels
     
     channel = data(1: floor(n_samples/windowSize)*windowSize, ch);%contains all the samples of a selected channel
     
-    kurt_vector_window = []; %initialize the vector before processing each channel
+    %%%%kurt_vector_window = []; %initialize the vector before processing each channel
     
     %reshape the selected channel into windows, where each window is stored
     %in a separate column:

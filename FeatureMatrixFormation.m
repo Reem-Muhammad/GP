@@ -38,14 +38,14 @@ for case_iter = cases(1:n_cases)
             disp(dummy);
             
             %extract the features from each record
-            %PE_outputMatrix = PE_F(data);
+            PE_outputMatrix = PE_F(data);
             FD_outputMatrix = FD_F(data);
-            %HE_outputMatrix = HE_F(data);
-            %kurt_outputMatrix = kurt_F(data);
-            %ApEn_outputMatrix = ApEn_F(data);
-            %STD_outputMatrix = STD_F(data);
+            HE_outputMatrix = HE_F(data);
+            kurt_outputMatrix = kurt_F(data);
+            ApEn_outputMatrix = ApEn_F(data);
+            STD_outputMatrix = STD_F(data);
             
-            %{
+            
             %concate the features matrix for each record
             feature_matrix_rec = [kurt_outputMatrix(:)...
                                   HE_outputMatrix(:)...
@@ -53,8 +53,8 @@ for case_iter = cases(1:n_cases)
                                   FD_outputMatrix(:)...
                                   ApEn_outputMatrix(:)...
                                   STD_outputMatrix(:)]; 
-              %}                
-             feature_matrix_rec = [FD_outputMatrix(:)]; 
+                              
+             %feature_matrix_rec = [ApEn_outputMatrix(:)]; 
                               
                               
                               
