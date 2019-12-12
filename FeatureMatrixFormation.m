@@ -5,7 +5,7 @@ addpath('E:\Odious hole\Major\Graduation Project\GP\ML\GP_WS\Features');
 
 %directory where the dataset is stored
 dataDir = 'G:\MIT_MAT_Processed';
-%directory where the features matrix and the corresponding labels to be stored
+%directory where the features matrix and the corresponding labels will be stored
 featureMatrixDir = 'G:\FeatureMatrix';
 
 n_cases = 1;  %number of cases to include
