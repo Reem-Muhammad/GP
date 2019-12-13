@@ -1,13 +1,17 @@
-function testval = testCriterionFunction(XTRAIN, YTRAIN, XTEST, rbf_sigma, boxconstraint)
+function classout = testCriterionFunction(XTRAIN, YTRAIN, XTEST, sigma, C)
 
-opts = statset('MaxIter',30000, 'Display', 'iter');
-model = svmtrain(XTRAIN, YTRAIN, 'kernel_function','rbf', 'options', opts);
-classout = svmclassify(model, XTEST);
+%opts = statset('MaxIter',1000000, 'Display', 'iter');
+model = fitcsvm(XTRAIN, YTRAIN, 'KernelFunction','rbf',...
+                'KernelScale', sigma, 'BoxConstraint', C,...
+                'Verbose', 1, ...
+                'NumPrint', 100
+                '');
+classout = predict(model, XTEST);
 
 %performance analysis
-CP = classperf(YTEST, classout);
+%CP = classperf(YTEST, classout);
 
 %extract the error rate for later optimization
-testval = CP.ErrorRate;
+%testval = CP.ErrorRate;
 
 end
