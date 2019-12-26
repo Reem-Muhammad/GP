@@ -1,4 +1,4 @@
-%function surrogateChannel = surrogateChannel_Extract(data, header)
+%function surrogate_channel = surrogateChannel_Extract(data, header)
 
 horizon = 30*60*256; %horizon in no. samples
 preictal_start = (header.annotation.starttime*256)-horizon;
@@ -16,8 +16,11 @@ end
 surrogate_space = W' * data';
 surrogate_channel = surrogate_space(find(lambda == max(lambda),1), : );
 
+%{
 %%%Visualization%%%
 subplot(2,1,1);
+%1:90000 is a subset of the preictal signal%
+%110000:110000+90000-1 is a subset of the interictal signal%
 scatter(surrogate_channel(1:90000),surrogate_channel(110000:110000+90000-1));
 ylabel('preictal');
 xlabel('interictal');
@@ -28,3 +31,5 @@ scatter(data(1:90000, 2),data(110000:110000+90000-1 ,2));
 ylabel('preictal');
 xlabel('interictal');
 title('Channel 2');
+%}
+%end
