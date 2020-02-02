@@ -1,35 +1,83 @@
-%function surrogate_channel = surrogateChannel_Extract(data, header)
+horizon = 23*60; %seconds
+dataDir = 'G:\MIT_MAT_Processed';   %path to the directory where the data is stored
 
-horizon = 30*60*256; %horizon in no. samples
-preictal_start = (header.annotation.starttime*256)-horizon;
-preictal_signal =data;
-interictal_signal = data;
-if preictal_start < 0 
-    preictal_signal(header.annotation.endtime*256:end, :) = 0;
-    interictal_signal ( 1 : header.annotation.starttime*256, :) = 0;
-else
-    preictal_signal( preictal_start : header.annotation.starttime*256, :) = 0;
-    interictal_signal( (header.annotation.starttime*256)+1 : end, :) = 0;
+
+%extract the names of all cases in the data directory(chb01 to chb24)
+cases = dir(dataDir);
+cases = {cases.name};   %convert the names into string cells
+cases = cases([3:length(cases)]); %execlude the directories '.' and '..' 
+
+%loop through the cases
+for case_iter = cases
+     if ( isdir( [dataDir '\' char(case_iter)] ) ) %check if it's a directory
+         
+        %extract the names of all the records for the specified case
+        records = dir([dataDir '\' char(case_iter) '\*.mat']);
+        records = {records.name};
+        
+        
+        %loop through the records of the specified case
+        for rec = [1:length(records)]   
+            %load the header file of each record to extract the annotations
+            load([dataDir '\' char(case_iter) '\' char(records(rec))])
+            
+            preictalSignal = zeros(size(data)); %to store class 1 (preictal + ictal) of a record
+            inerictalSignal = zeros(size(data)); %to store class 2 (interictal) of a record
+           
+            %loop through all the occurences of seizure
+            for event = 1:length(header.annotation.starttime)
+                preictalSignal_temp = zeros(size(data));
+                preictalStart = header.annotation.starttime(event) - horizon;
+                
+                if(preictalStart >= 0) %preictal starts in the same record
+                    preictalSignal_temp(preictalStart:header.annotation.endtime(event)*256, : ) = data(preictalStart:header.annotation.endtime(event)*256, : );
+                    preictalSignal = preictalSignal + preictalSignal_temp;
+                    
+                else
+                    if(rec ~=1 )
+                       
+                        preictalSignal_temp(1:header.annotation.endtime(event)*256, : )=data(1:header.annotation.endtime(event)*256, :);
+                        preictalSignal = preictalSignal + preictalSignal_temp;
+                        save([dataDir '\' char(case_iter) '\' char(records(rec))],'preictalSignal','-append')
+                        
+                        %load the previous record
+                        load([dataDir '\' char(case_iter) '\' char(records(rec-1))]);
+                        
+                        preictalSignal_temp = zeros(size(data)); %
+                        preictalSignal_temp(end+preictalStart*256:end,:)=data(end+preictalStart*256:end,:);
+                        preictalSignal = preictalSignal + preictalSignal_temp;
+                        save([dataDir '\' char(case_iter) '\' char(records(rec-1))],'preictalSignal','-append')
+                        
+                         %Update the surrogate channel, since the preictal
+                         %and interictal signals have changed
+                        [W, lambda, A] = csp(preictalSignal', interictalSignal');
+                        surrogateSpace = W' * data';
+                        surrogateChannel = surrogateSpace(find(lambda == max(lambda),1), : );
+                        save([dataDir '\' char(case_iter) '\' char(records(rec))],'surrogateChannel','-append');
+                        
+                        %load the current record again to preceed with the
+                        %other events (otherwise, this previous record will be processed instead)
+                        load([dataDir '\' char(case_iter) '\' char(records(rec))])
+                        
+                    else
+                        preictalSignal_temp = zeros(size(data));
+                        preictalSignal_temp(1:header.annotation.endtime(event)*256, : )=data(1:header.annotation.endtime(event)*256, :);
+                        preictalSignal = preictalSignal + preictalSignal_temp;
+                        interictalSignal = data - preictalSignal;
+                        save([dataDir '\' char(case_iter) '\' char(records(rec))],'preictalSignal','-append');
+                        save([dataDir '\' char(case_iter) '\' char(records(rec))],'interictalSignal','-append');
+                    end
+                end
+               
+            end
+            save([dataDir '\' char(case_iter) '\' char(records(rec))],'interictalSignal','-append');
+            
+            %Find the surrogate channel using CSP
+            [W, lambda, A] = csp(preictalSignal', interictalSignal');
+            surrogateSpace = W' * data';
+            surrogateChannel = surrogateSpace(find(lambda == max(lambda),1), : );
+            save([dataDir '\' char(case_iter) '\' char(records(rec))],'surrogateChannel','-append');
+        end
+        
+     end
 end
-
-[W, lambda, A] = csp(preictal_signal', interictal_signal');
-surrogate_space = W' * data';
-surrogate_channel = surrogate_space(find(lambda == max(lambda),1), : );
-
-%{
-%%%Visualization%%%
-subplot(2,1,1);
-%1:90000 is a subset of the preictal signal%
-%110000:110000+90000-1 is a subset of the interictal signal%
-scatter(surrogate_channel(1:90000),surrogate_channel(110000:110000+90000-1));
-ylabel('preictal');
-xlabel('interictal');
-title('Surrogate Channel');
-
-subplot(2,1,2);
-scatter(data(1:90000, 2),data(110000:110000+90000-1 ,2));
-ylabel('preictal');
-xlabel('interictal');
-title('Channel 2');
-%}
-%end
