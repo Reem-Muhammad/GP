@@ -1,5 +1,6 @@
+function [] = surrogateChannel_Extract()
 horizon = 23*60; %seconds
-dataDir = 'G:\MIT_MAT';   %path to the directory where the data is stored
+dataDir = 'I:\CHB_MIT_surrogateChannels';   %path to the directory where the data is stored
 %dataDir = 'G:\MIT_MAT_Processed';
 
 %extract the names of all cases in the data directory(chb01 to chb24)
@@ -33,7 +34,13 @@ for case_iter = cases
                 if(preictalStart >= 0) %preictal starts in the same record
                     preictalSignal_temp(preictalStart*256:header.annotation.endtime(event)*256, : ) = clear_data(preictalStart*256:header.annotation.endtime(event)*256, : );
                     preictalSignal = preictalSignal + preictalSignal_temp;
+                    %replace the overlap (which is doubled) with the
+                    %original data without duplication of values
+                    overlap_idx = find(abs(preictalSignal)>abs(clear_data));
+                    preictalSignal(overlap_idx) = clear_data(overlap_idx);
+                    
                     interictalSignal = clear_data - preictalSignal;
+                    
                     save([dataDir '\' char(case_iter) '\' char(records(rec))],'preictalSignal','-append')
                     save([dataDir '\' char(case_iter) '\' char(records(rec))],'interictalSignal','-append');
                     
@@ -42,6 +49,8 @@ for case_iter = cases
                        
                         preictalSignal_temp(1:header.annotation.endtime(event)*256, : )=clear_data(1:header.annotation.endtime(event)*256, :);
                         preictalSignal = preictalSignal + preictalSignal_temp;
+                        overlap_idx = find(abs(preictalSignal)>abs(clear_data));
+                        preictalSignal(overlap_idx) = clear_data(overlap_idx);
                         interictalSignal = clear_data - preictalSignal;
                         save([dataDir '\' char(case_iter) '\' char(records(rec))],'preictalSignal','-append')
                         save([dataDir '\' char(case_iter) '\' char(records(rec))],'interictalSignal','-append');
@@ -52,6 +61,8 @@ for case_iter = cases
                         preictalSignal_temp = zeros(size(clear_data)); %
                         preictalSignal_temp(end+preictalStart*256:end,:)=clear_data(end+preictalStart*256:end,:);
                         preictalSignal = preictalSignal + preictalSignal_temp;
+                        overlap_idx = find(abs(preictalSignal)>abs(clear_data));
+                        preictalSignal(overlap_idx) = clear_data(overlap_idx);
                         interictalSignal = clear_data - preictalSignal;
                         save([dataDir '\' char(case_iter) '\' char(records(rec-1))],'preictalSignal','-append')
                         save([dataDir '\' char(case_iter) '\' char(records(rec-1))],'interictalSignal','-append');
@@ -72,6 +83,8 @@ for case_iter = cases
                         preictalSignal_temp = zeros(size(clear_data));
                         preictalSignal_temp(1:header.annotation.endtime(event)*256, : )=clear_data(1:header.annotation.endtime(event)*256, :);
                         preictalSignal = preictalSignal + preictalSignal_temp;
+                        overlap_idx = find(abs(preictalSignal)>abs(clear_data));
+                        preictalSignal(overlap_idx) = clear_data(overlap_idx);
                         interictalSignal = clear_data - preictalSignal;
                         save([dataDir '\' char(case_iter) '\' char(records(rec))],'preictalSignal','-append');
                         save([dataDir '\' char(case_iter) '\' char(records(rec))],'interictalSignal','-append');
@@ -81,7 +94,7 @@ for case_iter = cases
                 end
                
             end
-            
+            interictalSignal = clear_data - preictalSignal; %interictal if there were no events at all
             save([dataDir '\' char(case_iter) '\' char(records(rec))],'preictalSignal','-append'); %???
             save([dataDir '\' char(case_iter) '\' char(records(rec))],'interictalSignal','-append');%???
             
@@ -93,4 +106,5 @@ for case_iter = cases
         end
         
      end
+end
 end

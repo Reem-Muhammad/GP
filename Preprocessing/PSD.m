@@ -1,4 +1,4 @@
-%function PSD_epochs = PSD[combinedIMF, windowSize]
+function PSD_epochs = PSD[combinedIMF, windowSize]
 
 %windowSize = 1 second = 256 sample
 windowSize=256;
@@ -20,4 +20,4 @@ for epoch = 1:size(combinedIMF_epochs, 1)
 end
 
 
-%end
+end
