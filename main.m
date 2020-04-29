@@ -1,5 +1,5 @@
 addpath('.\Features');
-addpath('.\Features');
+
 
 dataDir = '';
 windowSize = 256;

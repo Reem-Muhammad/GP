@@ -1,6 +1,6 @@
-function [] = surrogateChannel_Extract()
+%function [] = surrogateChannel_Extract()
 horizon = 23*60; %seconds
-dataDir = 'I:\CHB_MIT_surrogateChannels';   %path to the directory where the data is stored
+dataDir = 'E:\Odious hole\Major\Graduation Project\GP\GP_paperImplementation_WS\Data\CHB-MIT_mat';   %path to the directory where the data is stored
 %dataDir = 'G:\MIT_MAT_Processed';
 
 %extract the names of all cases in the data directory(chb01 to chb24)
@@ -32,7 +32,7 @@ for case_iter = cases
                 preictalStart = header.annotation.starttime(event) - horizon;
                 
                 if(preictalStart >= 0) %preictal starts in the same record
-                    preictalSignal_temp(preictalStart*256:header.annotation.endtime(event)*256, : ) = clear_data(preictalStart*256:header.annotation.endtime(event)*256, : );
+                    preictalSignal_temp(preictalStart*256:header.annotation.starttime(event)*256, : ) = clear_data(preictalStart*256:header.annotation.starttime(event)*256, : );
                     preictalSignal = preictalSignal + preictalSignal_temp;
                     %replace the overlap (which is doubled) with the
                     %original data without duplication of values
@@ -47,7 +47,7 @@ for case_iter = cases
                 else
                     if(rec ~=1 )
                        
-                        preictalSignal_temp(1:header.annotation.endtime(event)*256, : )=clear_data(1:header.annotation.endtime(event)*256, :);
+                        preictalSignal_temp(1:header.annotation.starttime(event)*256, : )=clear_data(1:header.annotation.starttime(event)*256, :);
                         preictalSignal = preictalSignal + preictalSignal_temp;
                         overlap_idx = find(abs(preictalSignal)>abs(clear_data));
                         preictalSignal(overlap_idx) = clear_data(overlap_idx);
@@ -81,7 +81,7 @@ for case_iter = cases
                         
                     else
                         preictalSignal_temp = zeros(size(clear_data));
-                        preictalSignal_temp(1:header.annotation.endtime(event)*256, : )=clear_data(1:header.annotation.endtime(event)*256, :);
+                        preictalSignal_temp(1:header.annotation.starttime(event)*256, : )=clear_data(1:header.annotation.starttime(event)*256, :);
                         preictalSignal = preictalSignal + preictalSignal_temp;
                         overlap_idx = find(abs(preictalSignal)>abs(clear_data));
                         preictalSignal(overlap_idx) = clear_data(overlap_idx);
@@ -107,4 +107,4 @@ for case_iter = cases
         
      end
 end
-end
+%end
