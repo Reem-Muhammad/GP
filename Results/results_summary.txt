@@ -1,0 +1,194 @@
+1)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+no normalization
+balancing (-ve class is almost twice the +ve class)
+rbf kernel
+classification w/o function
+RESULTS: accuracy -> 74.7
+	 Sensitivity -> 77.2
+	 Specificity -> 73.7
+
+
+
+
+2)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+no normalization
+balancing (-ve class is almost twice the +ve class)
+rbf kernel
+classification with function
+RESULTS: accuracy -> 75.82
+	 Sensitivity -> 77.24
+	 Specificity -> 75.27
+
+
+
+
+3)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+no normalization
+balancing (-ve class is almost twice the +ve class)
+rbf kernel
+classification with function
+RESULTS: accuracy -> 74.7
+	 Sensitivity -> 77.18
+	 Specificity -> 73.7
+
+
+
+
+4)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+no normalization
+balancing (-ve class is almost 3 times the +ve class)
+rbf kernel
+classification with function
+RESULTS: accuracy -> 75.35
+	 Sensitivity -> 76.34
+	 Specificity -> 75.07
+
+
+
+
+
+
+5)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+no normalization
+balancing (-ve class is almost 4 times the +ve class)
+rbf kernel
+classification with function
+RESULTS: accuracy -> 75.33
+	 Sensitivity -> 76.46
+	 Specificity -> 75.055
+
+
+
+
+6)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+no normalization
+No balancing
+rbf kernel
+classification with function
+RESULTS: accuracy -> 75.6
+	 Sensitivity -> 75.35
+	 Specificity -> 75.65
+
+
+
+
+
+
+7)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+no normalization
+balancing (-ve class is almost twice the +ve class)
+linear kernel
+classification with function
+RESULTS: accuracy -> 58.61
+	 Sensitivity -> 74.36
+	 Specificity -> 52.38
+
+
+
+8)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+normalization
+balancing (-ve class is almost twice the +ve class)
+linear kernel
+classification with function
+RESULTS: accuracy -> 58.66
+	 Sensitivity -> 75.06
+	 Specificity -> 52.29
+
+
+
+9)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+normalization
+balancing (-ve class is almost twice the +ve class)
+rbf kernel
+classification with function
+RESULTS: accuracy -> 74.84		75.65
+	 Sensitivity -> 75.102		76.64
+	 Specificity -> 74.74		75.25
+
+
+
+
+10)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+normalization + disable autoscale of svmtrain
+balancing (-ve class is almost twice the +ve class)
+rbf kernel
+classification with function
+RESULTS: accuracy -> 66.05
+	 Sensitivity -> 65.78
+	 Specificity -> 66.15
+
+
+
+
+11)	compare with (9)
+chb 3, 12, 13, 16:
+features selecteed: all but variation coefficient
+normalization
+balancing (-ve class is almost twice the +ve class)
+partitionaing using seperate_data() not dataPartition()
+rbf kernel
+classification with function
+RESULTS: accuracy -> 74.899
+	 Sensitivity -> 76.79
+	 Specificity -> 74.15
+
+
+
+12)
+chb 3, 12, 13, 16:
+features selected using sequentialfs with 10-fold cross-validation, and (03*spec+0.7*sens) as a criterion
+normalization
+balancing (-ve class is almost twice the +ve class)
+partitionaing using seperate_data() not dataPartition()
+rbf kernel
+classification with function
+RESULTS: after 2 days of running, there is still no output.
+
+
+
+13)
+chb 3, 12, 13, 16:
+features selected using sequentialfs without cross-validation. (03*spec+0.7*sens) was used as a criterion.
+normalization
+balancing (-ve class is almost twice the +ve class)
+partitionaing using dataPartition()
+rbf kernel
+classification with function
+RESULTS: after 2 days of running, there is still no output.
+
+
+13)
+chb 3, 12, 13, 16:
+features selected using forward sequentialfs, w/o specifying nFeatures, without cross-validation, and (03*spec+0.7*sens) as a criterion
+normalization
+balancing (-ve class is almost twice the +ve class)
+partitionaing using dataPartition()
+rbf kernel
+classification with function
+RESULTS: it took about 4 days to run sequentialfs. the selected features were all except for
+	5 (skewness), 10 (min absolute), and 13 (variartion coeff).
+	accuracy -> 74.87	74.77
+	Sensitivity -> 75.57	78.01
+	Specificity -> 74.596	73.49
+Conclusion: it's not worth using sequrntialfs instead of t-test. 
+	it takes alot of time without much improving the results.
