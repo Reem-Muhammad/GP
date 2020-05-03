@@ -1,5 +1,5 @@
 import matlab.engine
-import matlabEngineFunctions
+#import matlabEngineFunctions
 from scipy.io import loadmat
 import math
 import os
@@ -22,7 +22,7 @@ featureMatrix = sudoPatient["Data"] #extracting the feature matrix from the file
 Nwindows, Nfeatures = featureMatrix.shape #extracting the size of the feature feature Matrix
 featureMatrix = featureMatrix.tolist() #converting the numby array into a list
 
-discriminativeFeatures = [0,1,2,3,4,5,6,7,8] #indices for the discriminative features (arbitrary)
+discriminativeFeatures = [0,1,2,3,4,5,10,11,13] #indices for the discriminative features (arbitrary)
 
 windowIter = 0
 
