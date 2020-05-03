@@ -1,2 +1,4 @@
 *.asv
-
+matlabEngineFunctions.pyc
+matlabEngineFunctions.py
+matlabAPI.py
