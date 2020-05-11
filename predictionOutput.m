@@ -14,7 +14,14 @@ load('trainedModel'); %loading the prediction model
 
 % processedWindow = preprocessingMain(window);
 % featMatrix = featuresMain(processedWindow);
+%normalizedWindow = normalize_feats(featMatrix);%----->>
+result = svmclassify(svmmodel, featMatrix ); %outputs either 0 or 1
 
-result = svmclassify(svmmodel, featMatrix); %outputs either 0 or 1
-end
+
+
+% for i = [1:13057]
+%     normalizedWindow = normalize_feats(featMatrix(i,:));
+%     result = svmclassify(svmmodel, normalizedWindow);
+%     finalRes = [finalRes; result];
+% end
 
